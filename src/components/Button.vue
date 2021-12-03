@@ -14,14 +14,15 @@ button {
    border: 0;
    outline: 0;
    background: transparent;
-   width: calc(396px / 4);
-   height: calc((596px - 110px) / 6);
+   width: calc(380px / 4);
+   height: calc((572px - 110px) / 6);
    font-size: 1.2rem;
    cursor: pointer;
-   transition: 50ms;
+   transition: 100ms linear;
+   margin: 2px;
 
    &:hover {
-      background: #c7d4f069;
+      background: #b4c3e269;
    }
 }
 </style>

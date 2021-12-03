@@ -4,15 +4,15 @@
       <div class="wrap">
          <div class="display">
             <div class="result">
-               <span class="result__number">{{ result }}</span>
-               <span class="result__action">{{ action }}</span>
+               <span class="result__number">{{ result || "0" }}</span>
+               <span class="result__action" v-show="action">{{ action }}</span>
             </div>
             <div class="current-number">
                <span>{{ currentNumber }}</span>
             </div>
          </div>
          <div class="buttons">
-            <Button v-for="(button, index) in buttons" :key="index" :buttonType="button" v-html="button" />
+            <Button v-for="(button, index) in buttons" :key="index" :buttonType="button" v-html="button" @click="click" />
          </div>
       </div>
    </div>
@@ -28,9 +28,9 @@ export default {
    },
    data() {
       return {
-         result: 30,
-         action: "+",
-         currentNumber: 15,
+         result: null,
+         action: "",
+         currentNumber: "",
          buttons: [
             "%",
             "CE",
@@ -39,11 +39,11 @@ export default {
             "1/x",
             "x&#178;",
             "√",
-            "÷",
+            "/",
             "7",
             "8",
             "9",
-            "×",
+            "*",
             "4",
             "5",
             "6",
@@ -59,7 +59,92 @@ export default {
          ],
       };
    },
-   methods: {},
+   methods: {
+      actionHandler(action) {
+         if (this.result && this.currentNumber) {
+            if (action == "+") {
+               this.action = "+";
+               this.result += parseInt(this.currentNumber);
+            } else if (action == "-") {
+               this.action = "-";
+               this.result -= parseInt(this.currentNumber);
+            } else if (action == "*") {
+               this.action = "*";
+               this.result *= parseInt(this.currentNumber);
+            } else if (action == "/") {
+               this.action = "/";
+               this.result /= parseInt(this.currentNumber);
+            }
+         } else if (!this.result) {
+            this.result = parseInt(this.currentNumber);
+            this.action = action;
+         } else if (!this.currentNumber) {
+            this.action = action;
+         }
+         this.currentNumber = "";
+      },
+      clearEntry() {
+         this.currentNumber = "";
+      },
+      clear() {
+         this.currentNumber = "";
+         this.action = "";
+         this.result = 0;
+      },
+      delete() {
+         this.currentNumber = this.currentNumber.substring(0, this.currentNumber.length - 1);
+      },
+      click(type) {
+         if (!isNaN(type)) {
+            this.currentNumber += type;
+         } else {
+            switch (type) {
+               case "+":
+                  this.actionHandler("+");
+                  break;
+               case "-":
+                  this.actionHandler("-");
+                  break;
+               case "*":
+                  this.actionHandler("*");
+                  break;
+               case "/":
+                  this.actionHandler("/");
+                  break;
+               case "=":
+                  this.actionHandler(this.action);
+                  break;
+               case "√":
+                  console.log("pierwiastek");
+                  break;
+               case "%":
+                  console.log("procent");
+                  break;
+               case "CE":
+                  this.clearEntry();
+                  break;
+               case "C":
+                  this.clear();
+                  break;
+               case "Delete":
+                  this.delete();
+                  break;
+               case "1/x":
+                  console.log("adversity");
+                  break;
+               case "±":
+                  console.log("plus-minus");
+                  break;
+               case "x&#178;":
+                  console.log("potega");
+                  break;
+               case ",":
+                  console.log("przecinek");
+                  break;
+            }
+         }
+      },
+   },
 };
 </script> 
 
